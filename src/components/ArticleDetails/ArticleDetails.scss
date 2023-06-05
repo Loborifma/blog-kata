@@ -1,0 +1,22 @@
+.article-details {
+  max-width: 950px;
+  margin: 25px auto;
+
+  &__spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+
+  &__error {
+    margin: 20px 0;
+  }
+
+  &__content {
+    padding: 1rem;
+    margin-top: -25px;
+    background-color: white;
+    border-radius: 5px;
+  }
+}

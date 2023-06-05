@@ -1,0 +1,25 @@
+.article-list {
+  max-width: 950px;
+  margin: 25px auto;
+
+  &__spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ant-pagination-item-active {
+      background-color: #1890ff;
+
+      a {
+        color: white;
+      }
+    }
+  }
+}
