@@ -16,7 +16,7 @@ interface IArticleProps {
   tagList?: string[];
   slug: string;
   description?: string;
-  createdAt: string;
+  updatedAt: string;
   alphaOfDescription?: number;
   isDetailed?: boolean;
 }
@@ -28,7 +28,7 @@ const Article = ({
   slug,
   description,
   author,
-  createdAt,
+  updatedAt,
   alphaOfDescription = 1,
   isDetailed = false,
 }: IArticleProps) => {
@@ -65,7 +65,7 @@ const Article = ({
       <div className="article__profile-info">
         <div>
           <span>{author.username}</span>
-          <span>{formatDate(createdAt)}</span>
+          <span>{formatDate(updatedAt)}</span>
         </div>
         <div className="article__profile-icon">
           <img src={author.image || profileIcon} alt="Фото профиля" />

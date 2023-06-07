@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 
-import { getArticleBySlug } from '../../store/actions';
+import { getArticleBySlug } from '../../store/reducers/article/articleActions';
 import Article from '../Article';
 import './ArticleDetails.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';

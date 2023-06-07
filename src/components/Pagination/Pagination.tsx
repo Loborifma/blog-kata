@@ -2,7 +2,7 @@ import React from 'react';
 import { Pagination as PaginationAntd } from 'antd';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { articleSlice } from '../../store/reducers/articleSlice';
+import { articleSlice } from '../../store/reducers/article/articleSlice';
 
 const Pagination: React.FC = () => {
   const dispatch = useAppDispatch();

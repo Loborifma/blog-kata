@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { IArticle } from '../../models/IArticle';
+import { IArticle } from '../../../models/IArticle';
 
 interface ArticleData {
   articles: IArticle[];

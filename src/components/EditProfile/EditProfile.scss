@@ -1,0 +1,109 @@
+.sign-up {
+  width: 385px;
+  margin: 25px auto;
+  background-color: white;
+  padding: 48px 36px;
+  border-radius: 5px;
+
+  .error {
+    border: 1px solid red;
+  }
+
+  .error-message {
+    color: red;
+    margin-top: 5px;
+    display: block;
+    font-size: 14px;
+  }
+
+  &__confirm + .error-message {
+    position: relative;
+    bottom: 15px;
+  }
+
+  &__form {
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      margin-bottom: 15px;
+      display: block;
+
+      input {
+        margin-top: 5px;
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 1px solid #d9d9d9;
+        font-size: 16px;
+
+        &::placeholder {
+          color: #bfbfbf;
+        }
+      }
+    }
+
+    hr {
+      opacity: 0.3;
+    }
+  }
+
+  &__confirm {
+    display: flex !important;
+    position: relative;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    span {
+      flex-grow: 1;
+      margin: 5px;
+      margin-left: 10px;
+    }
+
+    .confirm__input {
+      height: 23px;
+      width: 23px;
+      position: relative;
+      cursor: pointer;
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    background-color: #1890ff;
+    border: 1px solid #1890ff;
+    border-radius: 5px;
+    padding: 10px 0;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($color: #1890ff, $amount: 10);
+    }
+
+    span {
+      color: white;
+      font-size: 16px;
+    }
+  }
+
+  &__is-sign-in {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #8c8c8c;
+    cursor: default;
+
+    a {
+      color: #1890ff;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

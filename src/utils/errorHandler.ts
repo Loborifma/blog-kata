@@ -1,4 +1,6 @@
-export function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message;
-  return String(error);
-}
+import { IError } from '../models/IError';
+
+// export function getErrorMessage(error: IError) {
+//   if (error.body instanceof Error) return error.body.message;
+//   return String(error.errors.join('\n'));
+// }

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Article from '../Article';
 import './ArticleList.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { fetchArticles } from '../../store/actions';
+import { fetchArticles } from '../../store/reducers/article/articleActions';
 import Spinner from '../Spinner';
 import Error from '../Error';
 import Pagination from '../Pagination';
@@ -21,11 +21,7 @@ const ArticleList: React.FC = () => {
 
   return (
     <main className="article-list">
-      {isLoading && (
-        <div className="article-list__spinner">
-          <Spinner />
-        </div>
-      )}
+      {isLoading && <Spinner />}
       {error && <Error text={error} />}
       {articleData.articles && !error && !isLoading && (
         <>

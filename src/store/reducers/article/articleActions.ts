@@ -1,5 +1,6 @@
-import { AppDispatch } from './store';
-import { articleSlice } from './reducers/articleSlice';
+import { AppDispatch } from '../../store';
+
+import { articleSlice } from './articleSlice';
 
 const BASE_URL = 'https://blog.kata.academy/api';
 
