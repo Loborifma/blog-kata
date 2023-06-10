@@ -40,7 +40,14 @@
     display: flex;
     align-items: center;
     margin-right: 0.25rem;
+    background-color: white;
+    border: none;
+    padding: 0;
     cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   &__likes {

@@ -8,11 +8,17 @@ const BASE_URL = 'https://blog.kata.academy/api';
 export function fetchArticles(page = 1) {
   return async (dispatch: AppDispatch) => {
     const currentPage = (page - 1) * 5;
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
     dispatch(articleSlice.actions.fetchArticle());
     const response = await fetch(
       `${BASE_URL}/articles?limit=5&offset=${currentPage}`,
       {
         method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user?.user?.token}`,
+        },
       }
     );
     const data = await response.json();
@@ -27,9 +33,15 @@ export function fetchArticles(page = 1) {
 
 export function getArticleBySlug(slug: string | undefined) {
   return async (dispatch: AppDispatch) => {
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
     dispatch(articleSlice.actions.fetchArticle());
     const response = await fetch(`${BASE_URL}/articles/${slug}`, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user?.user?.token}`,
+      },
     });
     const data = await response.json();
     if (data.errors) {
@@ -74,6 +86,46 @@ export function editArticle(article: ICreateArticleData, slug: string) {
         Authorization: `Bearer ${user.user.token}`,
       },
       body: JSON.stringify(article),
+    });
+    const data = await response.json();
+    if (data.errors) {
+      dispatch(articleSlice.actions.fetchArticleError(data));
+    } else {
+      dispatch(articleSlice.actions.getArticle(data.article));
+    }
+  };
+}
+
+export function favoriteArticle(slug: string) {
+  return async (dispatch: AppDispatch) => {
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
+    const response = await fetch(`${BASE_URL}/articles/${slug}/favorite`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.user.token}`,
+      },
+    });
+    const data = await response.json();
+    if (data.errors) {
+      dispatch(articleSlice.actions.fetchArticleError(data));
+    } else {
+      dispatch(articleSlice.actions.getArticle(data.article));
+    }
+  };
+}
+
+export function unFavoriteArticle(slug: string) {
+  return async (dispatch: AppDispatch) => {
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
+    const response = await fetch(`${BASE_URL}/articles/${slug}/favorite`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.user.token}`,
+      },
     });
     const data = await response.json();
     if (data.errors) {

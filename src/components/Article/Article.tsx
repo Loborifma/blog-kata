@@ -2,12 +2,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Popconfirm } from 'antd';
 
-import likeIcon from '../../assets/icons/LikeNotClicked.svg';
+import likeIconNotClicked from '../../assets/icons/LikeNotClicked.svg';
+import likeIconClicked from '../../assets/icons/LikeClicked.svg';
 import profileIcon from '../../assets/images/ProfileIcon.png';
 import { cutText, formatDate } from '../../utils/textHandler';
 import './Article.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { deleteArticle } from '../../store/reducers/article/articleActions';
+import {
+  deleteArticle,
+  favoriteArticle,
+  unFavoriteArticle,
+} from '../../store/reducers/article/articleActions';
 
 interface IArticleProps {
   author: {
@@ -16,6 +21,7 @@ interface IArticleProps {
   };
   title: string;
   favoritesCount: number;
+  favorited: boolean;
   tagList?: string[];
   slug: string;
   description?: string;
@@ -26,6 +32,7 @@ interface IArticleProps {
 const Article = ({
   title,
   favoritesCount,
+  favorited,
   tagList,
   slug,
   description,
@@ -47,6 +54,14 @@ const Article = ({
     }
   }, [user]);
 
+  const handleFavorite = () => {
+    if (favorited) {
+      dispatch(unFavoriteArticle(slug));
+    } else {
+      dispatch(favoriteArticle(slug));
+    }
+  };
+
   return (
     <article className="article">
       <div className="article__article-info">
@@ -58,9 +73,17 @@ const Article = ({
               {cutText(title, true)}
             </Link>
           )}
-          <div className="article__like-icon">
-            <img src={likeIcon} alt="like" />
-          </div>
+          <button
+            className="article__like-icon"
+            type="button"
+            disabled={!isLogin}
+            onClick={handleFavorite}
+          >
+            <img
+              src={favorited ? likeIconClicked : likeIconNotClicked}
+              alt="like"
+            />
+          </button>
           <span className="article__likes">{favoritesCount}</span>
         </div>
         {tagList && tagList.join('') && (

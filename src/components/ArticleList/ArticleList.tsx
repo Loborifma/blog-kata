@@ -14,9 +14,18 @@ const ArticleList: React.FC = () => {
   const { articleData, currentPage, currentArticle, error, isLoading } =
     useAppSelector((state) => state.articleReducer);
 
+  const { user: userStore } = useAppSelector((state) => state.userReducer);
+
   useEffect(() => {
     dispatch(fetchArticles(currentPage));
   }, [currentPage, currentArticle]);
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      dispatch(fetchArticles(currentPage));
+    }
+  }, [userStore]);
 
   return (
     <main className="article-list">
