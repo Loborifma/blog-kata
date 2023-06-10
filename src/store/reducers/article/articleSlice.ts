@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { IArticle } from '../../../models/IArticle';
+import { IError } from '../../../models/IError';
 
 interface ArticleData {
   articles: IArticle[];
@@ -12,7 +13,7 @@ interface ArticleState {
   currentPage: number;
   currentArticle: IArticle | null;
   isLoading: boolean;
-  error: string;
+  error: IError | null;
 }
 
 const initialState: ArticleState = {
@@ -23,7 +24,7 @@ const initialState: ArticleState = {
   currentPage: 1,
   currentArticle: null,
   isLoading: false,
-  error: '',
+  error: null,
 };
 
 export const articleSlice = createSlice({
@@ -35,12 +36,12 @@ export const articleSlice = createSlice({
     },
     fetchArticleSuccess(state, action: PayloadAction<ArticleData>) {
       state.isLoading = false;
-      state.error = '';
+      state.error = null;
       state.currentArticle = null;
       state.articleData.articles = action.payload.articles;
       state.articleData.articlesCount = action.payload.articlesCount;
     },
-    fetchArticleError(state, action: PayloadAction<string>) {
+    fetchArticleError(state, action: PayloadAction<IError>) {
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -50,7 +51,10 @@ export const articleSlice = createSlice({
     getArticle(state, action: PayloadAction<IArticle>) {
       state.currentArticle = action.payload;
       state.isLoading = false;
-      state.error = '';
+      state.error = null;
+    },
+    deleteArticles(state) {
+      state.currentArticle = null;
     },
   },
 });

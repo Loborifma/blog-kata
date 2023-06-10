@@ -11,18 +11,17 @@ import Pagination from '../Pagination';
 
 const ArticleList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { articleData, currentPage, error, isLoading } = useAppSelector(
-    (state) => state.articleReducer
-  );
+  const { articleData, currentPage, currentArticle, error, isLoading } =
+    useAppSelector((state) => state.articleReducer);
 
   useEffect(() => {
     dispatch(fetchArticles(currentPage));
-  }, [currentPage]);
+  }, [currentPage, currentArticle]);
 
   return (
     <main className="article-list">
       {isLoading && <Spinner />}
-      {error && <Error text={error} />}
+      {error && <Error text={error.errors['message']} />}
       {articleData.articles && !error && !isLoading && (
         <>
           <List

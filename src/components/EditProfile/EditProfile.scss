@@ -1,4 +1,4 @@
-.sign-up {
+.edit {
   width: 385px;
   margin: 25px auto;
   background-color: white;
@@ -46,30 +46,6 @@
         }
       }
     }
-
-    hr {
-      opacity: 0.3;
-    }
-  }
-
-  &__confirm {
-    display: flex !important;
-    position: relative;
-    justify-content: flex-start;
-    align-items: flex-start;
-
-    span {
-      flex-grow: 1;
-      margin: 5px;
-      margin-left: 10px;
-    }
-
-    .confirm__input {
-      height: 23px;
-      width: 23px;
-      position: relative;
-      cursor: pointer;
-    }
   }
 
   &__submit {
@@ -87,23 +63,6 @@
     span {
       color: white;
       font-size: 16px;
-    }
-  }
-
-  &__is-sign-in {
-    display: block;
-    margin-top: 10px;
-    text-align: center;
-    font-size: 12px;
-    color: #8c8c8c;
-    cursor: default;
-
-    a {
-      color: #1890ff;
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
 }

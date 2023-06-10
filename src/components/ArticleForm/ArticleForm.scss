@@ -1,5 +1,5 @@
-.general-form {
-  width: 385px;
+.article-form {
+  width: 940px;
   margin: 25px auto;
   background-color: white;
   padding: 48px 36px;
@@ -32,10 +32,11 @@
 
     label {
       font-size: 14px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       display: block;
 
-      input {
+      input,
+      textarea {
         margin-top: 5px;
         padding: 8px 12px;
         border-radius: 5px;
@@ -45,6 +46,10 @@
         &::placeholder {
           color: #bfbfbf;
         }
+      }
+
+      textarea {
+        min-height: 170px;
       }
     }
 
@@ -73,8 +78,52 @@
     }
   }
 
+  &__tags {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-end;
+
+    button {
+      margin-right: 20px;
+      padding: 8px 35px;
+      background-color: white;
+      border: 1px solid #1890ff;
+      border-radius: 5px;
+      color: #1890ff;
+      margin-bottom: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #1890ff;
+        color: white;
+      }
+    }
+
+    &-field {
+      display: flex;
+      flex-flow: row;
+      justify-content: flex-start;
+      align-items: center;
+
+      input {
+        width: 300px;
+        margin-right: 20px;
+      }
+
+      button {
+        border-color: #f5222d;
+        color: #f5222d;
+        margin-bottom: 0;
+
+        &:hover {
+          background-color: #f5222d;
+        }
+      }
+    }
+  }
+
   &__submit {
-    width: 100%;
+    width: 320px;
     background-color: #1890ff;
     border: 1px solid #1890ff;
     border-radius: 5px;
@@ -88,23 +137,6 @@
     span {
       color: white;
       font-size: 16px;
-    }
-  }
-
-  &__is-sign-in {
-    display: block;
-    margin-top: 10px;
-    text-align: center;
-    font-size: 12px;
-    color: #8c8c8c;
-    cursor: default;
-
-    a {
-      color: #1890ff;
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
 }

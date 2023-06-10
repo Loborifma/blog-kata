@@ -1,10 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useEffect } from 'react';
 
 import './EditProfile.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Spinner from '../Spinner';
 import { editUser } from '../../store/reducers/user/userActions';
+import useAuth, { getCurrentUser } from '../../hooks/useAuth';
+import { IUser } from '../../models/IUser';
 
 interface FormValue {
   username: string;
@@ -15,10 +18,16 @@ interface FormValue {
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPage = location.state?.from?.pathname || '/';
+
   const dispatch = useAppDispatch();
-  const { error, isLoading, user } = useAppSelector(
-    (state) => state.userReducer
-  );
+  const {
+    error,
+    isLoading,
+    user: userStore,
+  } = useAppSelector((state) => state.userReducer);
+  const [user] = useAuth(userStore);
 
   const {
     register,
@@ -26,20 +35,33 @@ const EditProfile = () => {
     formState: { errors },
   } = useForm<FormValue>();
 
-  const onSubmit: SubmitHandler<FormValue> = (data) => {
-    const userData = { user: data, token: user?.user.token };
-    dispatch(editUser(userData));
+  const goBack = () => {
     if (JSON.stringify(errors) === '{}') {
-      navigate('/');
+      navigate(fromPage);
     }
   };
 
+  const onSubmit: SubmitHandler<FormValue> = (data) => {
+    if (user) {
+      const userData = { user: data, token: user.user.token };
+      dispatch(editUser(userData));
+      goBack();
+    }
+  };
+
+  useEffect(() => {
+    const userParsed = getCurrentUser();
+    if (!userParsed) {
+      navigate('/');
+    }
+  }, [userStore]);
+
   return (
-    <div className="sign-up">
+    <div className="edit">
       {isLoading && <Spinner />}
       {!isLoading && (
         <>
-          <form className="sign-up__form" onSubmit={handleSubmit(onSubmit)}>
+          <form className="edit__form" onSubmit={handleSubmit(onSubmit)}>
             <h1>Edit profile</h1>
             <label htmlFor="username">
               Username
@@ -47,6 +69,7 @@ const EditProfile = () => {
                 className={
                   (errors['username'] || error?.errors['username']) && 'error'
                 }
+                id="username"
                 type="text"
                 placeholder="Username"
                 {...register('username', {
@@ -72,6 +95,7 @@ const EditProfile = () => {
                 className={
                   (errors['email'] || error?.errors['email']) && 'error'
                 }
+                id="email"
                 type="text"
                 placeholder="Email address"
                 {...register('email', {
@@ -93,6 +117,7 @@ const EditProfile = () => {
                 className={
                   (errors['password'] || error?.errors['password']) && 'error'
                 }
+                id="password"
                 type="password"
                 placeholder="New password"
                 {...register('password', {
@@ -115,6 +140,7 @@ const EditProfile = () => {
                 className={
                   (errors['image'] || error?.errors['image']) && 'error'
                 }
+                id="image"
                 type="text"
                 placeholder="Avatar image"
                 {...register('image', {
@@ -129,7 +155,7 @@ const EditProfile = () => {
               />
               <span className="error-message">{errors.image?.message}</span>
             </label>
-            <button className="sign-up__submit" type="submit">
+            <button className="edit__submit" type="submit">
               <span>Save</span>
             </button>
           </form>

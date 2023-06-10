@@ -3,7 +3,6 @@ export interface IArticle {
     following: boolean;
     image: string;
     username: string;
-    bio: string;
   };
   body: string;
   createdAt: string;
@@ -14,4 +13,13 @@ export interface IArticle {
   tagList: string[];
   title: string;
   updatedAt: string;
+}
+
+export interface ICreateArticleData {
+  article: {
+    title: string;
+    description: string;
+    body: string;
+    tagList: string[];
+  };
 }

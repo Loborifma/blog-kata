@@ -1,29 +1,21 @@
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 import './Header.scss';
 import profileIcon from '../../assets/images/ProfileIcon.png';
-import { IUser } from '../../models/IUser';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { userSlice } from '../../store/reducers/user/userSlice';
+import useAuth from '../../hooks/useAuth';
 
 function Header() {
-  const userJson = localStorage.getItem('user');
-  const userParsed: IUser | null = userJson && JSON.parse(userJson);
-  const [user, setUser] = useState(userParsed);
+  const location = useLocation();
   const { user: userStore } = useAppSelector((state) => state.userReducer);
+  const [user, clearUser] = useAuth(userStore);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (userParsed) {
-      setUser(userParsed);
-    }
-  }, [userStore]);
 
   const logOut = () => {
     localStorage.removeItem('user');
     dispatch(userSlice.actions.clearUser());
-    setUser(null);
+    clearUser();
   };
 
   return (
@@ -43,14 +35,20 @@ function Header() {
       )}
       {user && (
         <div className="header__profile-group">
-          <button className="header__create-article">Create article</button>
+          <Link
+            className="header__create-article"
+            to={'/new-article'}
+            state={{ from: location }}
+          >
+            Create article
+          </Link>
           <Link to={'/profile'} className="header__profile-preview">
             <span>{user.user.username}</span>
             <div className="header__profile-icon">
               <img src={user.user.image || profileIcon} alt="Фото профиля" />
             </div>
           </Link>
-          <button className="header__log-out" onClick={logOut}>
+          <button className="header__log-out" type="button" onClick={logOut}>
             Log Out
           </button>
         </div>

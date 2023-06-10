@@ -1,7 +1,7 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-import './SignIn.scss';
+// import './SignIn.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { loginUser } from '../../store/reducers/user/userActions';
 import Spinner from '../Spinner';
@@ -12,6 +12,9 @@ interface FormValue {
 }
 
 const SignUp = () => {
+  const location = useLocation();
+  const fromPage = location.state?.from?.pathname || '/';
+
   const dispatch = useAppDispatch();
   const { error, isLoading, user } = useAppSelector(
     (state) => state.userReducer
@@ -29,12 +32,15 @@ const SignUp = () => {
   };
 
   return (
-    <div className="sign-in">
+    <div className="general-form">
       {isLoading && <Spinner />}
-      {!isLoading && user && <Navigate to={'/'} replace />}
+      {!isLoading && user && <Navigate to={fromPage} replace />}
       {!isLoading && (
         <>
-          <form className="sign-in__form" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="general-form__form"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <h1>Sign In</h1>
             <label htmlFor="email">
               Email address
@@ -43,6 +49,7 @@ const SignUp = () => {
                   (errors['email'] || error?.errors['email or password']) &&
                   'error'
                 }
+                id="email"
                 type="text"
                 placeholder="Email address"
                 {...register('email', {
@@ -65,6 +72,7 @@ const SignUp = () => {
                   (errors['password'] || error?.errors['email or password']) &&
                   'error'
                 }
+                id="password"
                 type="password"
                 placeholder="Password"
                 {...register('password', {
@@ -84,12 +92,15 @@ const SignUp = () => {
               )}
               <span className="error-message">{errors.password?.message}</span>
             </label>
-            <button className="sign-in__submit" type="submit">
+            <button className="general-form__submit" type="submit">
               <span>Login</span>
             </button>
           </form>
-          <span className="sign-in__is-sign-up">
-            Don&apos;t have an account? <Link to={'/sign-up'}>Sign Up.</Link>
+          <span className="general-form__is-sign-in">
+            Don&apos;t have an account?{' '}
+            <Link to={'/sign-up'} state={{ from: fromPage }}>
+              Sign Up.
+            </Link>
           </span>
         </>
       )}

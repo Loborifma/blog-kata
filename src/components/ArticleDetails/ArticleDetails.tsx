@@ -29,16 +29,12 @@ const ArticleDetails: React.FC = () => {
       )}
       {error && (
         <div className="article-details__error">
-          <Error text={error} />
+          <Error text={error.errors['message']} />
         </div>
       )}
       {!isLoading && !error && currentArticle && (
         <>
-          <Article
-            {...currentArticle}
-            alphaOfDescription={0.5}
-            isDetailed={true}
-          />
+          <Article {...currentArticle} isDetailed={true} />
           <div className="article-details__content">
             <ReactMarkdown>{currentArticle.body}</ReactMarkdown>
           </div>

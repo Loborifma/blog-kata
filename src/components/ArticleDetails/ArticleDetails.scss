@@ -18,5 +18,9 @@
     margin-top: -25px;
     background-color: white;
     border-radius: 5px;
+
+    & > p {
+      word-wrap: break-word;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { ICreateArticleData } from '../../../models/IArticle';
 import { AppDispatch } from '../../store';
 
 import { articleSlice } from './articleSlice';
@@ -6,43 +7,95 @@ const BASE_URL = 'https://blog.kata.academy/api';
 
 export function fetchArticles(page = 1) {
   return async (dispatch: AppDispatch) => {
-    try {
-      const currentPage = (page - 1) * 5;
-      dispatch(articleSlice.actions.fetchArticle());
-      const response = await fetch(
-        `${BASE_URL}/articles?limit=5&offset=${currentPage}`,
-        {
-          method: 'GET',
-        }
-      ).then((res) => (res.ok ? res : Promise.reject(res)));
-      const data = await response.json();
+    const currentPage = (page - 1) * 5;
+    dispatch(articleSlice.actions.fetchArticle());
+    const response = await fetch(
+      `${BASE_URL}/articles?limit=5&offset=${currentPage}`,
+      {
+        method: 'GET',
+      }
+    );
+    const data = await response.json();
+    if (data.errors) {
+      dispatch(articleSlice.actions.fetchArticleError(data));
+    } else {
       dispatch(articleSlice.actions.setPage(page));
       dispatch(articleSlice.actions.fetchArticleSuccess(data));
-    } catch (error) {
-      dispatch(
-        articleSlice.actions.fetchArticleError(
-          'Произошла ошибка при загрузке статей'
-        )
-      );
     }
   };
 }
 
 export function getArticleBySlug(slug: string | undefined) {
   return async (dispatch: AppDispatch) => {
-    try {
-      dispatch(articleSlice.actions.fetchArticle());
-      const response = await fetch(`${BASE_URL}/articles/${slug}`, {
-        method: 'GET',
-      }).then((res) => (res.ok ? res : Promise.reject(res)));
-      const data = await response.json();
+    dispatch(articleSlice.actions.fetchArticle());
+    const response = await fetch(`${BASE_URL}/articles/${slug}`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    if (data.errors) {
+      dispatch(articleSlice.actions.fetchArticleError(data));
+    } else {
       dispatch(articleSlice.actions.getArticle(data.article));
-    } catch (error) {
-      dispatch(
-        articleSlice.actions.fetchArticleError(
-          'Произошла ошибка при загрузке статьи'
-        )
-      );
     }
+  };
+}
+
+export function createArticle(article: ICreateArticleData) {
+  return async (dispatch: AppDispatch) => {
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
+    dispatch(articleSlice.actions.fetchArticle());
+    const response = await fetch(`${BASE_URL}/articles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.user.token}`,
+      },
+      body: JSON.stringify(article),
+    });
+    const data = await response.json();
+    if (data.errors) {
+      dispatch(articleSlice.actions.fetchArticleError(data));
+    } else {
+      dispatch(articleSlice.actions.getArticle(data.article));
+    }
+  };
+}
+
+export function editArticle(article: ICreateArticleData, slug: string) {
+  return async (dispatch: AppDispatch) => {
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
+    dispatch(articleSlice.actions.fetchArticle());
+    const response = await fetch(`${BASE_URL}/articles/${slug}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.user.token}`,
+      },
+      body: JSON.stringify(article),
+    });
+    const data = await response.json();
+    if (data.errors) {
+      dispatch(articleSlice.actions.fetchArticleError(data));
+    } else {
+      dispatch(articleSlice.actions.getArticle(data.article));
+    }
+  };
+}
+
+export function deleteArticle(slug: string) {
+  return async (dispatch: AppDispatch) => {
+    const userJson = localStorage.getItem('user');
+    const user = userJson && JSON.parse(userJson);
+    dispatch(articleSlice.actions.fetchArticle());
+    await fetch(`${BASE_URL}/articles/${slug}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.user.token}`,
+      },
+    });
+    dispatch(articleSlice.actions.deleteArticles());
   };
 }

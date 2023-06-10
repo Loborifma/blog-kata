@@ -1,4 +1,4 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 
@@ -16,6 +16,9 @@ interface FormValue {
 }
 
 const SignUp = () => {
+  const location = useLocation();
+  const fromPage = location.state?.from || '/';
+
   const dispatch = useAppDispatch();
   const { error, isLoading, user } = useAppSelector(
     (state) => state.userReducer
@@ -36,12 +39,15 @@ const SignUp = () => {
   };
 
   return (
-    <div className="sign-up">
+    <div className="general-form">
       {isLoading && <Spinner />}
-      {!isLoading && user && <Navigate to={'/'} replace />}
+      {!isLoading && user && <Navigate to={fromPage} replace />}
       {!isLoading && (
         <>
-          <form className="sign-up__form" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="general-form__form"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <h1>Create new account</h1>
             <label htmlFor="username">
               Username
@@ -49,6 +55,7 @@ const SignUp = () => {
                 className={
                   (errors['username'] || error?.errors['username']) && 'error'
                 }
+                id="username"
                 type="text"
                 placeholder="Username"
                 {...register('username', {
@@ -74,6 +81,7 @@ const SignUp = () => {
                 className={
                   (errors['email'] || error?.errors['email']) && 'error'
                 }
+                id="email"
                 type="text"
                 placeholder="Email address"
                 {...register('email', {
@@ -95,6 +103,7 @@ const SignUp = () => {
                 className={
                   (errors['password'] || error?.errors['password']) && 'error'
                 }
+                id="password"
                 type="password"
                 placeholder="Password"
                 {...register('password', {
@@ -119,6 +128,7 @@ const SignUp = () => {
                     error?.errors['repeatPassword']) &&
                   'error'
                 }
+                id="repeatPassword"
                 type="password"
                 placeholder="Password"
                 {...register('repeatPassword', {
@@ -134,11 +144,12 @@ const SignUp = () => {
 
             <hr />
 
-            <label className="sign-up__confirm confirm" htmlFor="confirm">
+            <label className="general-form__confirm confirm" htmlFor="confirm">
               <input
                 className={`confirm__input ${
                   (errors['confirm'] || error?.errors['confirm']) && 'error'
                 }`}
+                id="confirm"
                 type="checkbox"
                 {...register('confirm', {
                   required: true,
@@ -153,12 +164,15 @@ const SignUp = () => {
                 You have to agree to the terms
               </span>
             )}
-            <button className="sign-up__submit" type="submit">
+            <button className="general-form__submit" type="submit">
               <span>Create</span>
             </button>
           </form>
-          <span className="sign-up__is-sign-in">
-            Already have an account? <Link to={'/sign-in'}>Sign In.</Link>
+          <span className="general-form__is-sign-in">
+            Already have an account?{' '}
+            <Link to={'/sign-in'} state={{ from: fromPage }}>
+              Sign In.
+            </Link>
           </span>
         </>
       )}
