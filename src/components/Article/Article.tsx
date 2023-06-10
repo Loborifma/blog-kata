@@ -25,7 +25,7 @@ interface IArticleProps {
   tagList?: string[];
   slug: string;
   description?: string;
-  updatedAt: string;
+  createdAt: string;
   isDetailed?: boolean;
 }
 
@@ -37,7 +37,7 @@ const Article = ({
   slug,
   description,
   author,
-  updatedAt,
+  createdAt,
   isDetailed = false,
 }: IArticleProps) => {
   const dispatch = useAppDispatch();
@@ -104,7 +104,7 @@ const Article = ({
         <div>
           <div>
             <span>{author.username}</span>
-            <span>{formatDate(updatedAt)}</span>
+            <span>{formatDate(createdAt)}</span>
           </div>
           <div className="article__profile-icon">
             <img src={author.image || profileIcon} alt="Фото профиля" />
