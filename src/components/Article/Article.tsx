@@ -44,6 +44,13 @@ const Article = ({
   const { user } = useAppSelector((state) => state.userReducer);
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
+  const [isUsersArticle, setIsUsersArticle] = useState(false);
+
+  useEffect(() => {
+    if (isDetailed) {
+      setIsUsersArticle(author.username === user?.user.username);
+    }
+  }, []);
 
   useEffect(() => {
     const userJson = localStorage.getItem('user');
@@ -110,7 +117,7 @@ const Article = ({
             <img src={author.image || profileIcon} alt="Фото профиля" />
           </div>
         </div>
-        {isDetailed && isLogin && (
+        {isDetailed && isLogin && isUsersArticle && (
           <div>
             <Popconfirm
               title="Are you sure to delete this article?"

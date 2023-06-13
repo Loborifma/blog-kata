@@ -3,14 +3,13 @@ import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 
 import './ArticleForm.scss';
-import { useAppSelector } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Spinner from '../Spinner';
-import { ICreateArticleData } from '../../models/IArticle';
-
-interface ArticleFormProps {
-  defaultValues: Partial<FormValue>;
-  onSuccess: (article: ICreateArticleData) => void;
-}
+import {
+  createArticle,
+  editArticle,
+} from '../../store/reducers/article/articleActions';
+import { getCurrentUser } from '../../hooks/useAuth';
 
 interface FormValue {
   title: string;
@@ -19,14 +18,29 @@ interface FormValue {
   tagList: { name: string }[];
 }
 
-const ArticleForm: React.FC<ArticleFormProps> = ({
-  defaultValues,
-  onSuccess,
-}) => {
+const toObjectTagArray = (array: string[]) => {
+  return array.map((el) => ({ name: el }));
+};
+
+const ArticleForm: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { isLoading, error, currentArticle } = useAppSelector(
     (state) => state.articleReducer
   );
+  const user = getCurrentUser();
+  const [isUsersArticle, setIsUsersArticle] = useState(false);
+
+  let defaultValues;
+
+  useEffect(() => {
+    setIsUsersArticle(user?.user.username === currentArticle?.author.username);
+  }, []);
+
+  if (currentArticle && isUsersArticle) {
+    const tags = toObjectTagArray(currentArticle.tagList);
+    defaultValues = { ...currentArticle, tagList: tags };
+  }
 
   const {
     register,
@@ -34,7 +48,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     formState: { errors },
     control,
   } = useForm<FormValue>({
-    defaultValues,
+    defaultValues: defaultValues || { tagList: [{ name: '' }] },
   });
   const { fields, append, remove } = useFieldArray({
     name: 'tagList',
@@ -58,7 +72,9 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         tagList: toStringArray,
       },
     };
-    onSuccess(article);
+    currentArticle && isUsersArticle
+      ? dispatch(editArticle(article, currentArticle.slug))
+      : dispatch(createArticle(article));
   };
 
   useEffect(() => {

@@ -7,9 +7,8 @@ import Layout from '../Layout';
 import SignUp from '../SignUp';
 import SignIn from '../SignIn';
 import EditProfile from '../EditProfile';
-import ArticleEdit from '../ArticleEdit';
-import ArticleCreate from '../ArticleCreate';
 import AuthRequire from '../../hoc/AuthRequire';
+import ArticleForm from '../ArticleForm';
 
 const App: React.FC = () => {
   return (
@@ -23,7 +22,7 @@ const App: React.FC = () => {
             path="articles/:slug/edit"
             element={
               <AuthRequire>
-                <ArticleEdit />
+                <ArticleForm />
               </AuthRequire>
             }
           />
@@ -41,7 +40,7 @@ const App: React.FC = () => {
             path="new-article"
             element={
               <AuthRequire>
-                <ArticleCreate />
+                <ArticleForm />
               </AuthRequire>
             }
           />

@@ -1,4 +1,4 @@
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useEffect } from 'react';
 
@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Spinner from '../Spinner';
 import { editUser } from '../../store/reducers/user/userActions';
 import useAuth, { getCurrentUser } from '../../hooks/useAuth';
-import { IUser } from '../../models/IUser';
 
 interface FormValue {
   username: string;
@@ -54,7 +53,7 @@ const EditProfile = () => {
     if (!userParsed) {
       navigate('/');
     }
-  }, [userStore]);
+  });
 
   return (
     <div className="edit">
